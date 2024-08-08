@@ -124,10 +124,10 @@ export default function Table() {
                     <p className='font-montserrat text-xs'>Afficher les automatisations d'urbanisme</p>
                 </div>
             </div>
-            <div className='shadow-custom-dark flex flex-col justify-center mt-8 max-h-[650px] overflow-hidden'>
+            <div className='shadow-custom-dark flex flex-col justify-center mt-14 max-h-[650px] overflow-hidden'>
                 <div className="overflow-auto max-h-[650px]">
                     <table>
-                        <thead className="table-header-styles">
+                        <thead className="table-header-styles ">
                             <tr>
                                 <th className='table-cell-styles'>Référence</th>
                                 <th className='table-cell-styles'>Déposé le</th>
@@ -144,7 +144,7 @@ export default function Table() {
                                     <tr key={index} className={`${index % 2 === 0 ? 'bg-[#f2f2f2]' : ''} border border-black/30`}>
                                         <th className='table-cell-styles pr-8'>{item.REFERENCE}</th>
                                         <td className='table-cell-styles pr-8'>{item.date_depot}</td>
-                                        <td className='table-cell-styles text-balance w-80 pr-8'>{item.dos_dnm_t}</td>
+                                        <td className='table-cell-styles text-balance w-96 pr-8'>{item.dos_dnm_t}</td>
                                         <td className='table-cell-styles pr-8'>{item.surf_cc}</td>
                                         <td className='table-cell-styles pr-8 '>
                                             <div className='multi-line-ellipsis' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.nature) }} />

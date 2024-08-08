@@ -15,7 +15,7 @@ input[type="search"]::-ms-clear {
 
 
 .table-cell-styles {
-  @apply text-start text-sm;
+  @apply text-start text-sm p-2;
 }
 
 .table-header-styles {
