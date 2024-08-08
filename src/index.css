@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+input[type="search"]::-ms-clear {
+  display: none;
+}
+
+.table-cell-styles {
+  @apply text-start text-sm;
+}
+
+.table-header-styles {
+  @apply text-start text-sm sticky top-0 bg-white z-10 shadow-custom-dark;
+}
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* styles.css */
+.multi-line-ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* Number of lines to display */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
