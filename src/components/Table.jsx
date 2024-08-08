@@ -160,9 +160,9 @@ export default function Table() {
                                         <td className='table-cell-styles text-balance w-96 pr-8'>{item.dos_dnm_t}</td>
                                         <td className='table-cell-styles pr-8'>{item.surf_cc}</td>
                                         <td className='table-cell-styles pr-8 '>
-                                            <div className={` ${rowClicked && clickedRowIndex === index ? '' : 'multi-line-ellipsis'}`} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.nature) }} />
+                                            <div className={` ${rowClicked &&clickedRowIndex === index ? '' : 'multi-line-ellipsis'}`} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.nature) }} />
                                         </td>
-                                        <td className='multi-line-ellipsis table-cell-styles pr-8 uppercase'>{item.BIE_ADRESSE}</td>
+                                        <td className={` ${rowClicked &&clickedRowIndex === index ? '' : 'multi-line-ellipsis'} pr-8 uppercase table-cell-styles`}>{item.BIE_ADRESSE}</td>
                                         <td className='table-cell-styles uppercase text-balance'>{item.BIE_CAD_T}</td>
                                     </tr>
                                 ))
