@@ -15,6 +15,15 @@ export default function Table() {
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [selectedDate, setSelectedDate] = useState(null); // State for selected date
     const [dateForSearch, setDateForSearch] = useState(''); // State for date filter input
+    const [clickedRowIndex, setClickedRowIndex] = useState(false); // State to track clicked row
+    const [rowClicked, setRowClicked] = useState(false);
+
+
+    const handleRowClick = (index) => {
+        setClickedRowIndex(index);
+        setRowClicked(!rowClicked)
+    };
+
 
     // Empty each search when other hass an input
 
@@ -141,13 +150,17 @@ export default function Table() {
                         <tbody>
                             {data && filteredData.length > 0 ? (
                                 filteredData.map((item, index) => (
-                                    <tr key={index} className={`${index % 2 === 0 ? 'bg-[#f2f2f2]' : ''} border border-black/30`}>
+                                    <tr
+                                        key={index}
+                                        className={`${index % 2 === 0 ? 'bg-[#f2f2f2]' : ''} border border-black/30`}
+                                        onClick={() => handleRowClick(index)}
+                                    >
                                         <th className='table-cell-styles pr-8'>{item.REFERENCE}</th>
                                         <td className='table-cell-styles pr-8'>{item.date_depot}</td>
                                         <td className='table-cell-styles text-balance w-96 pr-8'>{item.dos_dnm_t}</td>
                                         <td className='table-cell-styles pr-8'>{item.surf_cc}</td>
                                         <td className='table-cell-styles pr-8 '>
-                                            <div className='multi-line-ellipsis' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.nature) }} />
+                                            <div className={` ${rowClicked && clickedRowIndex === index ? '' : 'multi-line-ellipsis'}`} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.nature) }} />
                                         </td>
                                         <td className='multi-line-ellipsis table-cell-styles pr-8 uppercase'>{item.BIE_ADRESSE}</td>
                                         <td className='table-cell-styles uppercase text-balance'>{item.BIE_CAD_T}</td>
