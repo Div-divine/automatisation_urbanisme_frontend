@@ -1,4 +1,4 @@
-const SearchBar = ({ nameHandler, idHandler, placeholderHandler, valueHandler, setValueHandler, classNameHandler }) => {
+const SearchBar = ({ nameHandler, idHandler, placeholderHandler, valueHandler, setValueHandler, classNameHandler, refHandler }) => {
     return <form >
         <input type="search"
             name={nameHandler}
@@ -7,6 +7,7 @@ const SearchBar = ({ nameHandler, idHandler, placeholderHandler, valueHandler, s
             value={valueHandler}
             onChange={setValueHandler}
             className={classNameHandler}
+            ref={refHandler}
         />
     </form>
 }

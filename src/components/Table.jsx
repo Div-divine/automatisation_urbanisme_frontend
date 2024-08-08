@@ -4,43 +4,74 @@ import { TbCalendarEvent } from "react-icons/tb";
 import { TbSearch, TbArrowsLeftRight, TbReload } from "react-icons/tb";
 import getAllDataFromCollection from '../api/getAllCollectionData.js';
 import SearchBar from './SearchBar';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { format, parse } from 'date-fns';
+import { fr } from 'date-fns/locale'; // Import the French locale
 
 export default function Table() {
     const [data, setData] = useState(null);
-    const dateInputRef = useRef(null)
+    const searchInputRef = useRef(null);
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
+    const [selectedDate, setSelectedDate] = useState(null); // State for selected date
+    const [dateForSearch, setDateForSearch] = useState(''); // State for date filter input
+
+    // Empty each search when other hass an input
+
+    useEffect(()=>{
+        if(dateForSearch){
+            setSearchQuery('')
+        }
+    },[dateForSearch])
+
+    
+    useEffect(()=>{
+        if(searchQuery){
+            setDateForSearch('')
+        }
+    },[searchQuery])
 
     useEffect(() => {
         async function getData() {
             const data = await getAllDataFromCollection();
-            console.log('All data from collection: ', data)
+            console.log('All data from collection: ', data);
             setData(data);
-            return data;
         }
 
-        getData()
-    }, [])
+        getData();
+    }, []);
 
-    // Click handler to open the date input
-    const handleClick = () => {
-        if (dateInputRef.current) {
-            dateInputRef.current.click();
+    // Handle date selection and format the date
+    const handleDateChange = (date) => {
+        if (date) {
+            const formattedDate = format(date, 'dd/MM/yyyy', { locale: fr });
+            console.log("Selected date:", formattedDate);
+            setSelectedDate(date);  // Update the state with Date object
+            setDateForSearch(formattedDate); // Update the state with formatted date
+        } else {
+            setSelectedDate(null);
+            setDateForSearch('');
         }
     };
 
-     // Function to handle changes in the search input field
-     const handleSearchChange = event => {
+    // Function to handle changes in the search input field
+    const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
 
+    // Function to filter results by (Référence or Demandeur or Adresse) and Date
+    const filteredData = data ? data.filter(item => {
+        // Convert date_depot to a formatted date string for comparison
+        const formattedDateDepot = item?.date_depot ? format(parse(item.date_depot, 'dd/MM/yyyy', new Date()), 'dd/MM/yyyy', { locale: fr }) : '';
 
-    // Function to filter result by (Référence or Demandeur or Adresse)
-        const filteredData = data ? data.filter(item => {
-            const Reference = item?.REFERENCE?.toLowerCase().includes(searchQuery.toLowerCase());
-            const Demandeur = item?.dos_dnm_t?.toLowerCase().includes(searchQuery.toLowerCase());
-            const Addresse = item?.BIE_ADRESSE?.toLowerCase().includes(searchQuery.toLowerCase());
-            return Reference || Demandeur || Addresse;
-        }) : [];
+        // Check if the search query matches and if the date matches
+        const Reference = item?.REFERENCE?.toLowerCase().includes(searchQuery.toLowerCase());
+        const Demandeur = item?.dos_dnm_t?.toLowerCase().includes(searchQuery.toLowerCase());
+        const Addresse = item?.BIE_ADRESSE?.toLowerCase().includes(searchQuery.toLowerCase());
+        const DateMatch = !dateForSearch || formattedDateDepot === dateForSearch;
+
+        return (Reference || Demandeur || Addresse) && DateMatch;
+    }) : [];
 
     return (
         <div className='mt-10'>
@@ -54,6 +85,7 @@ export default function Table() {
                             classNameHandler='placeholder:font-montserrat  placeholder:text-xs border-0 focus:outline-none focus:border-none font-montserrat'
                             nameHandler="search-bar"
                             idHandler="search-bar"
+                            refHandler={searchInputRef}
                         />
                     </div>
                     <div className='border rounded-xl border-black h-fit p-2 max-lg:hidden'>
@@ -62,13 +94,28 @@ export default function Table() {
                 </div>
                 <div className='h-fit flex flex-wrap justify-between mt-8 lg:mt-0 col'>
                     <div className='flex flex-wrap justify-between border-b border-b-black w-[80%] md:text-sm'>
-                        <p className='font-montserrat text-black/50 text-xs '>Filtrer par date</p>
+                        <SearchBar
+                            placeholderHandler='Filtrer par date (jj/MM/aaaa)'
+                            valueHandler={dateForSearch}
+                            setValueHandler={setDateForSearch}
+                            classNameHandler='placeholder:font-montserrat  placeholder:text-xs border-0 focus:outline-none focus:border-none font-montserrat'
+                            nameHandler="date-search-bar"
+                            idHandler="date-search-bar"
+                            refHandler={searchInputRef} // Reuse same ref for simplicity
+                        />
                         <div className='flex flex-wrap justify-end'>
-                            <input type="date" name="filter-bar" id="filter-bar" placeholder='Filtrer par date' className='hidden' ref={dateInputRef} />
-                            <TbCalendarEvent className='text-2xl' />
+                            <DatePicker
+                                selected={selectedDate}
+                                onChange={handleDateChange}
+                                customInput={<div><TbCalendarEvent className='text-2xl' /></div>}
+                                dateFormat="dd/MM/yyyy"
+                                locale={fr}
+                                calendarClassName="custom-calendar"
+                                className="border-0 focus:outline-none"
+                            />
                         </div>
                     </div>
-                    <div className='border rounded-xl border-black  lg:col-span-1 h-fit p-2 md:text-sm max-lg:hidden'>
+                    <div className='border rounded-xl border-black lg:col-span-1 h-fit p-2 md:text-sm max-lg:hidden'>
                         <TbReload className='text-xl' />
                     </div>
                 </div>
@@ -76,7 +123,6 @@ export default function Table() {
                     <TbArrowsLeftRight className='text-xl' />
                     <p className='font-montserrat text-xs'>Afficher les automatisations d'urbanisme</p>
                 </div>
-
             </div>
             <div className='shadow-custom-dark flex flex-col justify-center mt-8 max-h-[650px] overflow-hidden'>
                 <div className="overflow-auto max-h-[650px]">
@@ -117,5 +163,5 @@ export default function Table() {
                 </div>
             </div>
         </div>
-    )
+    );
 }

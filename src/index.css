@@ -9,13 +9,17 @@ input[type="search"]::-webkit-search-cancel-button {
 input[type="search"]::-ms-clear {
   display: none;
 }
+.custom-calendar {
+  @apply z-20
+}
+
 
 .table-cell-styles {
   @apply text-start text-sm;
 }
 
 .table-header-styles {
-  @apply text-start text-sm sticky top-0 bg-white z-10 shadow-custom-dark;
+  @apply text-start text-sm sticky top-0 bg-white z-0 shadow-custom-dark;
 }
 
 .truncate {
@@ -33,3 +37,4 @@ input[type="search"]::-ms-clear {
   text-overflow: ellipsis;
   line-height: 1.5;
 }
+
