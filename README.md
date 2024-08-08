@@ -1,8 +1,29 @@
-# React + Vite
+# Nom du projet
+Urbanisme
+## Description
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ce projet est un tableau d'urbanisme.
 
-Currently, two official plugins are available:
+## Prérequis
+Assurez-vous d'avoir [Node.js](https://nodejs.org/) installé sur votre machine. Vous pouvez vérifier cela en exécutant :
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+node -v
+npm -v
+
+## Projet
+
+Ces instructions vous aideront à configurer le projet localement sur votre machine.
+
+## Cloner le projet
+git clone https://github.com/Div-divine/automatisation_urbanisme_frontend.git
+
+## Instruction
+cd dossier-projet(donc la racine de votre projet)
+
+## Installer les dépendances
+npm i
+
+## Lancer le projet
+npm run dev
+
