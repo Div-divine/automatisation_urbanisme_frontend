@@ -3,10 +3,12 @@ import DOMPurify from 'dompurify';
 import { TbCalendarEvent } from "react-icons/tb";
 import { TbSearch, TbArrowsLeftRight, TbReload } from "react-icons/tb";
 import getAllDataFromCollection from '../api/getAllCollectionData.js';
+import SearchBar from './SearchBar';
 
 export default function Table() {
     const [data, setData] = useState(null);
     const dateInputRef = useRef(null)
+    const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
     useEffect(() => {
         async function getData() {
@@ -26,14 +28,33 @@ export default function Table() {
         }
     };
 
-     // Function to filter result by (Référence or Demandeur or )
+     // Function to handle changes in the search input field
+     const handleSearchChange = event => {
+        setSearchQuery(event.target.value);
+    };
+
+
+    // Function to filter result by (Référence or Demandeur or Adresse)
+        const filteredData = data ? data.filter(item => {
+            const Reference = item?.REFERENCE?.toLowerCase().includes(searchQuery.toLowerCase());
+            const Demandeur = item?.dos_dnm_t?.toLowerCase().includes(searchQuery.toLowerCase());
+            const Addresse = item?.BIE_ADRESSE?.toLowerCase().includes(searchQuery.toLowerCase());
+            return Reference || Demandeur || Addresse;
+        }) : [];
 
     return (
         <div className='mt-10'>
             <div className='h-fit flex flex-col justify-center items-center max-md:w-[90%] max-lg:m-auto lg:w-[65%] lg:grid lg:grid-cols-3 lg:gap-5 lg:flex-wrap lg:justify-between'>
                 <div className='h-fit flex flex-wrap justify-between md:text-sm'>
                     <div className='border-b border-b-black w-[80%] '>
-                        <input type="search" name="search-bar" id="seach-bar" placeholder='Rechercher' className='placeholder:font-montserrat  placeholder:text-xs border-0 focus:outline-none focus:border-none font-montserrat' />
+                        <SearchBar
+                            placeholderHandler='Rechercher'
+                            valueHandler={searchQuery}
+                            setValueHandler={handleSearchChange}
+                            classNameHandler='placeholder:font-montserrat  placeholder:text-xs border-0 focus:outline-none focus:border-none font-montserrat'
+                            nameHandler="search-bar"
+                            idHandler="search-bar"
+                        />
                     </div>
                     <div className='border rounded-xl border-black h-fit p-2 max-lg:hidden'>
                         <TbSearch className='text-xl' />
@@ -72,8 +93,8 @@ export default function Table() {
                             </tr>
                         </thead>
                         <tbody>
-                            {data && data.length > 0 ? (
-                                data.map((item, index) => (
+                            {data && filteredData.length > 0 ? (
+                                filteredData.map((item, index) => (
                                     <tr key={index} className={`${index % 2 === 0 ? 'bg-[#f2f2f2]' : ''} border border-black/30`}>
                                         <th className='table-cell-styles pr-8'>{item.REFERENCE}</th>
                                         <td className='table-cell-styles pr-8'>{item.date_depot}</td>
